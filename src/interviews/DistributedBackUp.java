@@ -6,13 +6,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.io.*;
 
 public class DistributedBackUp {
 	
 	public static void main(String[] args) {
 		DistributedBackUp db = new DistributedBackUp();
 		
-		Scanner input = new Scanner(System.in);
+		
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		Scanner input = new Scanner(br);
 		
 		System.out.println(db.backup(input));
 		
