@@ -2,6 +2,11 @@ package interviews;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class FindLine {
@@ -39,42 +44,53 @@ public class FindLine {
 		}
 		
 		//System.out.println(Arrays.toString(yArray));
-		int max = 0;
 		String result = "";
+		Map<List<Double>, Integer> map = new HashMap<List<Double>, Integer>();
 		
 		for (int i=0; i<lineNum; i++) {
 			for (int j=i+1; j<lineNum; j++) {
 				double[] num1 = new double[]{xArray[i], yArray[i]};
 				double[] num2 = new double[]{xArray[j], yArray[j]};
 
-				
-				//check special case
-				if (num1[0]-num2[0] == 0) {
-					int count = 0;
-					for (int e : xArray) {
-						if (num1[0] == e) {
-							count++;
-						}
-					}
-					if (count > max) {
-						max = count;
-						result = "X ="+num1[0]+","+max;
-					}
-					
+
+				List<Double> AB = new ArrayList<Double>();
+				if (num1[0] == num2[0]) {
+					AB.add(num1[0]);
 				} else {
-					double[] AB = findAandB(num1, num2);
-					int count = countMatch(AB, xArray, yArray);
-					if (count > max) {
-						max = count;
-						result = "Y = "+AB[0]+"x+"+AB[1]+","+max;
-					}
+					double[] theAB = findAandB(num1, num2);
+					AB.add(theAB[0]);
+					AB.add(theAB[1]);
 				}
 				
-				
+				//put it in to hashtable
+				if (map.containsKey(AB)) {
+					map.put(AB, map.get(AB)+1);
+				} else {
+					map.put(AB, 1);
+				}
 			}
 		}
 		
-		return result;
+		int max = 0;
+		List<Double> theAB = null;
+		for (List<Double> AB : map.keySet()) {
+			System.out.println(AB+" "+map.get(AB));
+			if (map.get(AB) > max) {
+				max = map.get(AB);
+				theAB = AB;
+			}
+		}
+		
+		if (theAB == null) {
+			return "Line not found.";
+		} else {
+			if (theAB.size() == 1) {
+				return "X ="+theAB.get(0)+","+countMatch(theAB, xArray, yArray);
+			} else {
+				return "Y = "+theAB.get(0)+"x+"+theAB.get(1)+","+countMatch(theAB, xArray, yArray);
+			}
+		}
+		
 	}
 	
 	private double[] findAandB(double[] coord1, double[] coord2) {
@@ -90,19 +106,29 @@ public class FindLine {
 		return new double[]{a, b};
 	}
 	
-	private int countMatch(double[] AB, int[] xArray, int[] yArray) {
+	private int countMatch(List<Double> AB, int[] xArray, int[] yArray) {
 		int count = 0;
 		
-		double a = AB[0];
-		double b = AB[1];
-		
-		for (int i=0; i<xArray.length; i++) {
-			if (a*xArray[i] + b == yArray[i]) {
-				count++;
+		if (AB.size() == 1) {
+			double num = AB.get(0);
+			
+			for (int i=0; i<xArray.length; i++) {
+				if (xArray[i] == num) {
+					count++;
+				}
+			}
+		} else {
+			double a = AB.get(0);
+			double b = AB.get(1);
+			
+			for (int i=0; i<xArray.length; i++) {
+				if (a*xArray[i] + b == yArray[i]) {
+					count++;
+				}
 			}
 		}
 		
-		return count;	
+		return count;
 	}
 	
 }
