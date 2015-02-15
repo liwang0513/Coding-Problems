@@ -4,6 +4,15 @@ public class FindSmallestInSortedRotatedArray {
 
 	public static void main(String[] args) {
 		
+		try {
+			System.out.println(1<<-1);
+			System.out.println(Integer.toBinaryString(1>>1));
+			return;
+		} catch(Exception e) {
+			throw e;
+		} finally {
+			System.out.println("hello");
+		}
 	}
 	
 	static int find(int[] nums) {

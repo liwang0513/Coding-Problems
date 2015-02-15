@@ -13,6 +13,6 @@ public class CheckBinaryTreeBalance {
 		int right = maxDepth(root.right);
 		if (right == -1) return -1;
 		
-		return (Math.abs(right-left) <= 1) ? Math.max(right, left) : -1;
+		return (Math.abs(right-left) <= 1) ? Math.max(right, left)+1 : -1;
 	}
 }
